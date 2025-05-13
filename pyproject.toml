@@ -1,5 +1,5 @@
 [project]
-name = "carbonaware_scheduler"
+name = "carbonaware-scheduler-client"
 version = "0.1.0-alpha.2"
 description = "The official Python library for the carbonaware-scheduler API"
 dynamic = ["readme"]
