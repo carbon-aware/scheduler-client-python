@@ -62,6 +62,8 @@ class ScheduleResource(SyncAPIResource):
         Schedule
 
         Args:
+          windows: List of time windows to schedule (start and end must be in the future)
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -126,6 +128,8 @@ class AsyncScheduleResource(AsyncAPIResource):
         Schedule
 
         Args:
+          windows: List of time windows to schedule (start and end must be in the future)
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
