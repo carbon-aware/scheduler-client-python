@@ -27,13 +27,10 @@ pip install git+ssh://git@github.com/stainless-sdks/carbonaware-python.git
 The full API of this library can be found in [api.md](api.md).
 
 ```python
-import os
 from datetime import datetime
 from carbonaware_scheduler import CarbonawareScheduler
 
-client = CarbonawareScheduler(
-    api_key=os.environ.get("CARBONAWARE_API_KEY"),  # This is the default and can be omitted
-)
+client = CarbonawareScheduler()
 
 schedule = client.schedule.create(
     duration="duration",
@@ -53,24 +50,16 @@ schedule = client.schedule.create(
 print(schedule.ideal)
 ```
 
-While you can provide an `api_key` keyword argument,
-we recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)
-to add `CARBONAWARE_API_KEY="My API Key"` to your `.env` file
-so that your API Key is not stored in source control.
-
 ## Async usage
 
 Simply import `AsyncCarbonawareScheduler` instead of `CarbonawareScheduler` and use `await` with each API call:
 
 ```python
-import os
 from datetime import datetime
 import asyncio
 from carbonaware_scheduler import AsyncCarbonawareScheduler
 
-client = AsyncCarbonawareScheduler(
-    api_key=os.environ.get("CARBONAWARE_API_KEY"),  # This is the default and can be omitted
-)
+client = AsyncCarbonawareScheduler()
 
 
 async def main() -> None:
