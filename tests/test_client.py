@@ -691,7 +691,7 @@ class TestCarbonawareScheduler:
                     object,
                     maybe_transform(
                         dict(
-                            duration="duration",
+                            duration="PT1H",
                             windows=[
                                 {
                                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -726,7 +726,7 @@ class TestCarbonawareScheduler:
                     object,
                     maybe_transform(
                         dict(
-                            duration="duration",
+                            duration="PT1H",
                             windows=[
                                 {
                                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -776,7 +776,7 @@ class TestCarbonawareScheduler:
         respx_mock.post("/v0/schedule/").mock(side_effect=retry_handler)
 
         response = client.schedule.with_raw_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -814,7 +814,7 @@ class TestCarbonawareScheduler:
         respx_mock.post("/v0/schedule/").mock(side_effect=retry_handler)
 
         response = client.schedule.with_raw_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -852,7 +852,7 @@ class TestCarbonawareScheduler:
         respx_mock.post("/v0/schedule/").mock(side_effect=retry_handler)
 
         response = client.schedule.with_raw_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -1520,7 +1520,7 @@ class TestAsyncCarbonawareScheduler:
                     object,
                     maybe_transform(
                         dict(
-                            duration="duration",
+                            duration="PT1H",
                             windows=[
                                 {
                                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -1555,7 +1555,7 @@ class TestAsyncCarbonawareScheduler:
                     object,
                     maybe_transform(
                         dict(
-                            duration="duration",
+                            duration="PT1H",
                             windows=[
                                 {
                                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -1606,7 +1606,7 @@ class TestAsyncCarbonawareScheduler:
         respx_mock.post("/v0/schedule/").mock(side_effect=retry_handler)
 
         response = await client.schedule.with_raw_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -1645,7 +1645,7 @@ class TestAsyncCarbonawareScheduler:
         respx_mock.post("/v0/schedule/").mock(side_effect=retry_handler)
 
         response = await client.schedule.with_raw_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -1684,7 +1684,7 @@ class TestAsyncCarbonawareScheduler:
         respx_mock.post("/v0/schedule/").mock(side_effect=retry_handler)
 
         response = await client.schedule.with_raw_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),

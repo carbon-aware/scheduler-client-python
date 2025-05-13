@@ -30,7 +30,7 @@ from carbonaware_scheduler import CarbonawareScheduler
 client = CarbonawareScheduler()
 
 schedule = client.schedule.create(
-    duration="duration",
+    duration="PT1H",
     windows=[
         {
             "end": datetime.fromisoformat("2019-12-27T18:11:19.117"),
@@ -61,7 +61,7 @@ client = AsyncCarbonawareScheduler()
 
 async def main() -> None:
     schedule = await client.schedule.create(
-        duration="duration",
+        duration="PT1H",
         windows=[
             {
                 "end": datetime.fromisoformat("2019-12-27T18:11:19.117"),
@@ -111,7 +111,7 @@ client = CarbonawareScheduler()
 
 try:
     client.schedule.create(
-        duration="duration",
+        duration="PT1H",
         windows=[
             {
                 "end": datetime.fromisoformat("2019-12-27T18:11:19.117"),
@@ -170,7 +170,7 @@ client = CarbonawareScheduler(
 
 # Or, configure per-request:
 client.with_options(max_retries=5).schedule.create(
-    duration="duration",
+    duration="PT1H",
     windows=[
         {
             "end": datetime.fromisoformat("2019-12-27T18:11:19.117"),
@@ -209,7 +209,7 @@ client = CarbonawareScheduler(
 
 # Override per-request:
 client.with_options(timeout=5.0).schedule.create(
-    duration="duration",
+    duration="PT1H",
     windows=[
         {
             "end": datetime.fromisoformat("2019-12-27T18:11:19.117"),
@@ -266,7 +266,7 @@ from carbonaware_scheduler import CarbonawareScheduler
 
 client = CarbonawareScheduler()
 response = client.schedule.with_raw_response.create(
-    duration="duration",
+    duration="PT1H",
     windows=[{
         "end": datetime.fromisoformat("2019-12-27T18:11:19.117"),
         "start": datetime.fromisoformat("2019-12-27T18:11:19.117"),
@@ -296,7 +296,7 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 
 ```python
 with client.schedule.with_streaming_response.create(
-    duration="duration",
+    duration="PT1H",
     windows=[
         {
             "end": datetime.fromisoformat("2019-12-27T18:11:19.117"),

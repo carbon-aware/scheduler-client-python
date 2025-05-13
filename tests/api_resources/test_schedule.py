@@ -22,7 +22,7 @@ class TestSchedule:
     @parametrize
     def test_method_create(self, client: CarbonawareScheduler) -> None:
         schedule = client.schedule.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -42,7 +42,7 @@ class TestSchedule:
     @parametrize
     def test_method_create_with_all_params(self, client: CarbonawareScheduler) -> None:
         schedule = client.schedule.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -63,7 +63,7 @@ class TestSchedule:
     @parametrize
     def test_raw_response_create(self, client: CarbonawareScheduler) -> None:
         response = client.schedule.with_raw_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -87,7 +87,7 @@ class TestSchedule:
     @parametrize
     def test_streaming_response_create(self, client: CarbonawareScheduler) -> None:
         with client.schedule.with_streaming_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -117,7 +117,7 @@ class TestAsyncSchedule:
     @parametrize
     async def test_method_create(self, async_client: AsyncCarbonawareScheduler) -> None:
         schedule = await async_client.schedule.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -137,7 +137,7 @@ class TestAsyncSchedule:
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncCarbonawareScheduler) -> None:
         schedule = await async_client.schedule.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -158,7 +158,7 @@ class TestAsyncSchedule:
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncCarbonawareScheduler) -> None:
         response = await async_client.schedule.with_raw_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
@@ -182,7 +182,7 @@ class TestAsyncSchedule:
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncCarbonawareScheduler) -> None:
         async with async_client.schedule.with_streaming_response.create(
-            duration="duration",
+            duration="PT1H",
             windows=[
                 {
                     "end": parse_datetime("2019-12-27T18:11:19.117Z"),
