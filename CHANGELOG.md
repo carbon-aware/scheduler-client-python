@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2025-05-13)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/carbon-aware/scheduler-client-python/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* manual updates ([6120e46](https://github.com/carbon-aware/scheduler-client-python/commit/6120e46e32425d30b865eec44375cabe539a4376))
+
 ## 0.1.0-alpha.1 (2025-05-13)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/carbon-aware/scheduler-client-python/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)
