@@ -61,12 +61,10 @@ class CarbonawareScheduler(SyncAPIClient):
     with_streaming_response: CarbonawareSchedulerWithStreamedResponse
 
     # client options
-    api_key: str | None
 
     def __init__(
         self,
         *,
-        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -86,14 +84,7 @@ class CarbonawareScheduler(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous CarbonawareScheduler client instance.
-
-        This automatically infers the `api_key` argument from the `CARBONAWARE_API_KEY` environment variable if it is not provided.
-        """
-        if api_key is None:
-            api_key = os.environ.get("CARBONAWARE_API_KEY")
-        self.api_key = api_key
-
+        """Construct a new synchronous CarbonawareScheduler client instance."""
         if base_url is None:
             base_url = os.environ.get("CARBONAWARE_SCHEDULER_BASE_URL")
         if base_url is None:
@@ -123,14 +114,6 @@ class CarbonawareScheduler(SyncAPIClient):
 
     @property
     @override
-    def auth_headers(self) -> dict[str, str]:
-        api_key = self.api_key
-        if api_key is None:
-            return {}
-        return {"Authorization": f"Bearer {api_key}"}
-
-    @property
-    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
@@ -138,21 +121,9 @@ class CarbonawareScheduler(SyncAPIClient):
             **self._custom_headers,
         }
 
-    @override
-    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
-        if self.api_key and headers.get("Authorization"):
-            return
-        if isinstance(custom_headers.get("Authorization"), Omit):
-            return
-
-        raise TypeError(
-            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
-        )
-
     def copy(
         self,
         *,
-        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -186,7 +157,6 @@ class CarbonawareScheduler(SyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
@@ -261,12 +231,10 @@ class AsyncCarbonawareScheduler(AsyncAPIClient):
     with_streaming_response: AsyncCarbonawareSchedulerWithStreamedResponse
 
     # client options
-    api_key: str | None
 
     def __init__(
         self,
         *,
-        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -286,14 +254,7 @@ class AsyncCarbonawareScheduler(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async AsyncCarbonawareScheduler client instance.
-
-        This automatically infers the `api_key` argument from the `CARBONAWARE_API_KEY` environment variable if it is not provided.
-        """
-        if api_key is None:
-            api_key = os.environ.get("CARBONAWARE_API_KEY")
-        self.api_key = api_key
-
+        """Construct a new async AsyncCarbonawareScheduler client instance."""
         if base_url is None:
             base_url = os.environ.get("CARBONAWARE_SCHEDULER_BASE_URL")
         if base_url is None:
@@ -323,14 +284,6 @@ class AsyncCarbonawareScheduler(AsyncAPIClient):
 
     @property
     @override
-    def auth_headers(self) -> dict[str, str]:
-        api_key = self.api_key
-        if api_key is None:
-            return {}
-        return {"Authorization": f"Bearer {api_key}"}
-
-    @property
-    @override
     def default_headers(self) -> dict[str, str | Omit]:
         return {
             **super().default_headers,
@@ -338,21 +291,9 @@ class AsyncCarbonawareScheduler(AsyncAPIClient):
             **self._custom_headers,
         }
 
-    @override
-    def _validate_headers(self, headers: Headers, custom_headers: Headers) -> None:
-        if self.api_key and headers.get("Authorization"):
-            return
-        if isinstance(custom_headers.get("Authorization"), Omit):
-            return
-
-        raise TypeError(
-            '"Could not resolve authentication method. Expected the api_key to be set. Or for the `Authorization` headers to be explicitly omitted"'
-        )
-
     def copy(
         self,
         *,
-        api_key: str | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
@@ -386,7 +327,6 @@ class AsyncCarbonawareScheduler(AsyncAPIClient):
 
         http_client = http_client or self._client
         return self.__class__(
-            api_key=api_key or self.api_key,
             base_url=base_url or self.base_url,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
