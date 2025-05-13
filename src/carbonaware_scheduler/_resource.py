@@ -8,13 +8,13 @@ from typing import TYPE_CHECKING
 import anyio
 
 if TYPE_CHECKING:
-    from ._client import Carbonaware, AsyncCarbonaware
+    from ._client import CarbonawareScheduler, AsyncCarbonawareScheduler
 
 
 class SyncAPIResource:
-    _client: Carbonaware
+    _client: CarbonawareScheduler
 
-    def __init__(self, client: Carbonaware) -> None:
+    def __init__(self, client: CarbonawareScheduler) -> None:
         self._client = client
         self._get = client.get
         self._post = client.post
@@ -28,9 +28,9 @@ class SyncAPIResource:
 
 
 class AsyncAPIResource:
-    _client: AsyncCarbonaware
+    _client: AsyncCarbonawareScheduler
 
-    def __init__(self, client: AsyncCarbonaware) -> None:
+    def __init__(self, client: AsyncCarbonawareScheduler) -> None:
         self._client = client
         self._get = client.get
         self._post = client.post

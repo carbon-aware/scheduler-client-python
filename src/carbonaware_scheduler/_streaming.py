@@ -12,7 +12,7 @@ import httpx
 from ._utils import extract_type_var_from_base
 
 if TYPE_CHECKING:
-    from ._client import Carbonaware, AsyncCarbonaware
+    from ._client import CarbonawareScheduler, AsyncCarbonawareScheduler
 
 
 _T = TypeVar("_T")
@@ -30,7 +30,7 @@ class Stream(Generic[_T]):
         *,
         cast_to: type[_T],
         response: httpx.Response,
-        client: Carbonaware,
+        client: CarbonawareScheduler,
     ) -> None:
         self.response = response
         self._cast_to = cast_to
@@ -93,7 +93,7 @@ class AsyncStream(Generic[_T]):
         *,
         cast_to: type[_T],
         response: httpx.Response,
-        client: AsyncCarbonaware,
+        client: AsyncCarbonawareScheduler,
     ) -> None:
         self.response = response
         self._cast_to = cast_to

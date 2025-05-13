@@ -12,9 +12,9 @@ from ._client import (
     Transport,
     AsyncClient,
     AsyncStream,
-    Carbonaware,
     RequestOptions,
-    AsyncCarbonaware,
+    CarbonawareScheduler,
+    AsyncCarbonawareScheduler,
 )
 from ._models import BaseModel
 from ._version import __title__, __version__
@@ -28,12 +28,12 @@ from ._exceptions import (
     RateLimitError,
     APITimeoutError,
     BadRequestError,
-    CarbonawareError,
     APIConnectionError,
     AuthenticationError,
     InternalServerError,
     PermissionDeniedError,
     UnprocessableEntityError,
+    CarbonawareSchedulerError,
     APIResponseValidationError,
 )
 from ._base_client import DefaultHttpxClient, DefaultAsyncHttpxClient
@@ -49,7 +49,7 @@ __all__ = [
     "NotGiven",
     "NOT_GIVEN",
     "Omit",
-    "CarbonawareError",
+    "CarbonawareSchedulerError",
     "APIError",
     "APIStatusError",
     "APITimeoutError",
@@ -69,8 +69,8 @@ __all__ = [
     "AsyncClient",
     "Stream",
     "AsyncStream",
-    "Carbonaware",
-    "AsyncCarbonaware",
+    "CarbonawareScheduler",
+    "AsyncCarbonawareScheduler",
     "file_from_path",
     "BaseModel",
     "DEFAULT_TIMEOUT",

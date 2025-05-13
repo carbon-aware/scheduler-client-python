@@ -21,7 +21,7 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from carbonaware_scheduler import Carbonaware, AsyncCarbonaware, APIResponseValidationError
+from carbonaware_scheduler import CarbonawareScheduler, AsyncCarbonawareScheduler, APIResponseValidationError
 from carbonaware_scheduler._types import Omit
 from carbonaware_scheduler._utils import parse_datetime, maybe_transform
 from carbonaware_scheduler._models import BaseModel, FinalRequestOptions
@@ -51,7 +51,7 @@ def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
     return 0.1
 
 
-def _get_open_connections(client: Carbonaware | AsyncCarbonaware) -> int:
+def _get_open_connections(client: CarbonawareScheduler | AsyncCarbonawareScheduler) -> int:
     transport = client._client._transport
     assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
 
@@ -59,8 +59,8 @@ def _get_open_connections(client: Carbonaware | AsyncCarbonaware) -> int:
     return len(pool._requests)
 
 
-class TestCarbonaware:
-    client = Carbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+class TestCarbonawareScheduler:
+    client = CarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter) -> None:
@@ -107,7 +107,7 @@ class TestCarbonaware:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = Carbonaware(
+        client = CarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
@@ -141,7 +141,7 @@ class TestCarbonaware:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = Carbonaware(
+        client = CarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
@@ -266,7 +266,7 @@ class TestCarbonaware:
         assert timeout == httpx.Timeout(100.0)
 
     def test_client_timeout_option(self) -> None:
-        client = Carbonaware(
+        client = CarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
@@ -277,7 +277,7 @@ class TestCarbonaware:
     def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
-            client = Carbonaware(
+            client = CarbonawareScheduler(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -287,7 +287,7 @@ class TestCarbonaware:
 
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
-            client = Carbonaware(
+            client = CarbonawareScheduler(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -297,7 +297,7 @@ class TestCarbonaware:
 
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = Carbonaware(
+            client = CarbonawareScheduler(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -308,7 +308,7 @@ class TestCarbonaware:
     async def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             async with httpx.AsyncClient() as http_client:
-                Carbonaware(
+                CarbonawareScheduler(
                     base_url=base_url,
                     api_key=api_key,
                     _strict_response_validation=True,
@@ -316,14 +316,14 @@ class TestCarbonaware:
                 )
 
     def test_default_headers_option(self) -> None:
-        client = Carbonaware(
+        client = CarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = Carbonaware(
+        client2 = CarbonawareScheduler(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
@@ -337,12 +337,12 @@ class TestCarbonaware:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = Carbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = CarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
         with update_env(**{"CARBONAWARE_API_KEY": Omit()}):
-            client2 = Carbonaware(base_url=base_url, api_key=None, _strict_response_validation=True)
+            client2 = CarbonawareScheduler(base_url=base_url, api_key=None, _strict_response_validation=True)
 
         with pytest.raises(
             TypeError,
@@ -356,7 +356,7 @@ class TestCarbonaware:
         assert request2.headers.get("Authorization") is None
 
     def test_default_query_option(self) -> None:
-        client = Carbonaware(
+        client = CarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -470,7 +470,7 @@ class TestCarbonaware:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, client: Carbonaware) -> None:
+    def test_multipart_repeating_array(self, client: CarbonawareScheduler) -> None:
         request = client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -557,7 +557,7 @@ class TestCarbonaware:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = Carbonaware(
+        client = CarbonawareScheduler(
             base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
@@ -567,17 +567,17 @@ class TestCarbonaware:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(CARBONAWARE_BASE_URL="http://localhost:5000/from/env"):
-            client = Carbonaware(api_key=api_key, _strict_response_validation=True)
+        with update_env(CARBONAWARE_SCHEDULER_BASE_URL="http://localhost:5000/from/env"):
+            client = CarbonawareScheduler(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            Carbonaware(
+            CarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            Carbonaware(
+            CarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -586,7 +586,7 @@ class TestCarbonaware:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: Carbonaware) -> None:
+    def test_base_url_trailing_slash(self, client: CarbonawareScheduler) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -599,10 +599,10 @@ class TestCarbonaware:
     @pytest.mark.parametrize(
         "client",
         [
-            Carbonaware(
+            CarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            Carbonaware(
+            CarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -611,7 +611,7 @@ class TestCarbonaware:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: Carbonaware) -> None:
+    def test_base_url_no_trailing_slash(self, client: CarbonawareScheduler) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -624,10 +624,10 @@ class TestCarbonaware:
     @pytest.mark.parametrize(
         "client",
         [
-            Carbonaware(
+            CarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            Carbonaware(
+            CarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -636,7 +636,7 @@ class TestCarbonaware:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: Carbonaware) -> None:
+    def test_absolute_request_url(self, client: CarbonawareScheduler) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -647,7 +647,7 @@ class TestCarbonaware:
         assert request.url == "https://myapi.com/foo"
 
     def test_copied_client_does_not_close_http(self) -> None:
-        client = Carbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = CarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -658,7 +658,7 @@ class TestCarbonaware:
         assert not client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        client = Carbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = CarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -679,7 +679,7 @@ class TestCarbonaware:
 
     def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            Carbonaware(
+            CarbonawareScheduler(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None)
             )
 
@@ -690,12 +690,12 @@ class TestCarbonaware:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = Carbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        strict_client = CarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        client = Carbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        client = CarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=False)
 
         response = client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -723,7 +723,7 @@ class TestCarbonaware:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = Carbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = CarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -806,7 +806,7 @@ class TestCarbonaware:
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
         self,
-        client: Carbonaware,
+        client: CarbonawareScheduler,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -849,7 +849,7 @@ class TestCarbonaware:
     @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
-        self, client: Carbonaware, failures_before_success: int, respx_mock: MockRouter
+        self, client: CarbonawareScheduler, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -887,7 +887,7 @@ class TestCarbonaware:
     @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
-        self, client: Carbonaware, failures_before_success: int, respx_mock: MockRouter
+        self, client: CarbonawareScheduler, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = client.with_options(max_retries=4)
 
@@ -922,8 +922,8 @@ class TestCarbonaware:
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
 
-class TestAsyncCarbonaware:
-    client = AsyncCarbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+class TestAsyncCarbonawareScheduler:
+    client = AsyncCarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
@@ -972,7 +972,7 @@ class TestAsyncCarbonaware:
         assert isinstance(self.client.timeout, httpx.Timeout)
 
     def test_copy_default_headers(self) -> None:
-        client = AsyncCarbonaware(
+        client = AsyncCarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         assert client.default_headers["X-Foo"] == "bar"
@@ -1006,7 +1006,7 @@ class TestAsyncCarbonaware:
             client.copy(set_default_headers={}, default_headers={"X-Foo": "Bar"})
 
     def test_copy_default_query(self) -> None:
-        client = AsyncCarbonaware(
+        client = AsyncCarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"foo": "bar"}
         )
         assert _get_params(client)["foo"] == "bar"
@@ -1131,7 +1131,7 @@ class TestAsyncCarbonaware:
         assert timeout == httpx.Timeout(100.0)
 
     async def test_client_timeout_option(self) -> None:
-        client = AsyncCarbonaware(
+        client = AsyncCarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, timeout=httpx.Timeout(0)
         )
 
@@ -1142,7 +1142,7 @@ class TestAsyncCarbonaware:
     async def test_http_client_timeout_option(self) -> None:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
-            client = AsyncCarbonaware(
+            client = AsyncCarbonawareScheduler(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1152,7 +1152,7 @@ class TestAsyncCarbonaware:
 
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
-            client = AsyncCarbonaware(
+            client = AsyncCarbonawareScheduler(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1162,7 +1162,7 @@ class TestAsyncCarbonaware:
 
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
-            client = AsyncCarbonaware(
+            client = AsyncCarbonawareScheduler(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, http_client=http_client
             )
 
@@ -1173,7 +1173,7 @@ class TestAsyncCarbonaware:
     def test_invalid_http_client(self) -> None:
         with pytest.raises(TypeError, match="Invalid `http_client` arg"):
             with httpx.Client() as http_client:
-                AsyncCarbonaware(
+                AsyncCarbonawareScheduler(
                     base_url=base_url,
                     api_key=api_key,
                     _strict_response_validation=True,
@@ -1181,14 +1181,14 @@ class TestAsyncCarbonaware:
                 )
 
     def test_default_headers_option(self) -> None:
-        client = AsyncCarbonaware(
+        client = AsyncCarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_headers={"X-Foo": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("x-foo") == "bar"
         assert request.headers.get("x-stainless-lang") == "python"
 
-        client2 = AsyncCarbonaware(
+        client2 = AsyncCarbonawareScheduler(
             base_url=base_url,
             api_key=api_key,
             _strict_response_validation=True,
@@ -1202,12 +1202,12 @@ class TestAsyncCarbonaware:
         assert request.headers.get("x-stainless-lang") == "my-overriding-header"
 
     def test_validate_headers(self) -> None:
-        client = AsyncCarbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncCarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
         assert request.headers.get("Authorization") == f"Bearer {api_key}"
 
         with update_env(**{"CARBONAWARE_API_KEY": Omit()}):
-            client2 = AsyncCarbonaware(base_url=base_url, api_key=None, _strict_response_validation=True)
+            client2 = AsyncCarbonawareScheduler(base_url=base_url, api_key=None, _strict_response_validation=True)
 
         with pytest.raises(
             TypeError,
@@ -1221,7 +1221,7 @@ class TestAsyncCarbonaware:
         assert request2.headers.get("Authorization") is None
 
     def test_default_query_option(self) -> None:
-        client = AsyncCarbonaware(
+        client = AsyncCarbonawareScheduler(
             base_url=base_url, api_key=api_key, _strict_response_validation=True, default_query={"query_param": "bar"}
         )
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1335,7 +1335,7 @@ class TestAsyncCarbonaware:
         params = dict(request.url.params)
         assert params == {"foo": "2"}
 
-    def test_multipart_repeating_array(self, async_client: AsyncCarbonaware) -> None:
+    def test_multipart_repeating_array(self, async_client: AsyncCarbonawareScheduler) -> None:
         request = async_client._build_request(
             FinalRequestOptions.construct(
                 method="get",
@@ -1422,7 +1422,7 @@ class TestAsyncCarbonaware:
         assert response.foo == 2
 
     def test_base_url_setter(self) -> None:
-        client = AsyncCarbonaware(
+        client = AsyncCarbonawareScheduler(
             base_url="https://example.com/from_init", api_key=api_key, _strict_response_validation=True
         )
         assert client.base_url == "https://example.com/from_init/"
@@ -1432,17 +1432,17 @@ class TestAsyncCarbonaware:
         assert client.base_url == "https://example.com/from_setter/"
 
     def test_base_url_env(self) -> None:
-        with update_env(CARBONAWARE_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncCarbonaware(api_key=api_key, _strict_response_validation=True)
+        with update_env(CARBONAWARE_SCHEDULER_BASE_URL="http://localhost:5000/from/env"):
+            client = AsyncCarbonawareScheduler(api_key=api_key, _strict_response_validation=True)
             assert client.base_url == "http://localhost:5000/from/env/"
 
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncCarbonaware(
+            AsyncCarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncCarbonaware(
+            AsyncCarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1451,7 +1451,7 @@ class TestAsyncCarbonaware:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_trailing_slash(self, client: AsyncCarbonaware) -> None:
+    def test_base_url_trailing_slash(self, client: AsyncCarbonawareScheduler) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1464,10 +1464,10 @@ class TestAsyncCarbonaware:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncCarbonaware(
+            AsyncCarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncCarbonaware(
+            AsyncCarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1476,7 +1476,7 @@ class TestAsyncCarbonaware:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_base_url_no_trailing_slash(self, client: AsyncCarbonaware) -> None:
+    def test_base_url_no_trailing_slash(self, client: AsyncCarbonawareScheduler) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1489,10 +1489,10 @@ class TestAsyncCarbonaware:
     @pytest.mark.parametrize(
         "client",
         [
-            AsyncCarbonaware(
+            AsyncCarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/", api_key=api_key, _strict_response_validation=True
             ),
-            AsyncCarbonaware(
+            AsyncCarbonawareScheduler(
                 base_url="http://localhost:5000/custom/path/",
                 api_key=api_key,
                 _strict_response_validation=True,
@@ -1501,7 +1501,7 @@ class TestAsyncCarbonaware:
         ],
         ids=["standard", "custom http client"],
     )
-    def test_absolute_request_url(self, client: AsyncCarbonaware) -> None:
+    def test_absolute_request_url(self, client: AsyncCarbonawareScheduler) -> None:
         request = client._build_request(
             FinalRequestOptions(
                 method="post",
@@ -1512,7 +1512,7 @@ class TestAsyncCarbonaware:
         assert request.url == "https://myapi.com/foo"
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        client = AsyncCarbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncCarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         assert not client.is_closed()
 
         copied = client.copy()
@@ -1524,7 +1524,7 @@ class TestAsyncCarbonaware:
         assert not client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        client = AsyncCarbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncCarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
         async with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -1546,7 +1546,7 @@ class TestAsyncCarbonaware:
 
     async def test_client_max_retries_validation(self) -> None:
         with pytest.raises(TypeError, match=r"max_retries cannot be None"):
-            AsyncCarbonaware(
+            AsyncCarbonawareScheduler(
                 base_url=base_url, api_key=api_key, _strict_response_validation=True, max_retries=cast(Any, None)
             )
 
@@ -1558,12 +1558,12 @@ class TestAsyncCarbonaware:
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
 
-        strict_client = AsyncCarbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        strict_client = AsyncCarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        client = AsyncCarbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=False)
+        client = AsyncCarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=False)
 
         response = await client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1592,7 +1592,7 @@ class TestAsyncCarbonaware:
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     @pytest.mark.asyncio
     async def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = AsyncCarbonaware(base_url=base_url, api_key=api_key, _strict_response_validation=True)
+        client = AsyncCarbonawareScheduler(base_url=base_url, api_key=api_key, _strict_response_validation=True)
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
@@ -1676,7 +1676,7 @@ class TestAsyncCarbonaware:
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     async def test_retries_taken(
         self,
-        async_client: AsyncCarbonaware,
+        async_client: AsyncCarbonawareScheduler,
         failures_before_success: int,
         failure_mode: Literal["status", "exception"],
         respx_mock: MockRouter,
@@ -1720,7 +1720,7 @@ class TestAsyncCarbonaware:
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_omit_retry_count_header(
-        self, async_client: AsyncCarbonaware, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncCarbonawareScheduler, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1759,7 +1759,7 @@ class TestAsyncCarbonaware:
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_overwrite_retry_count_header(
-        self, async_client: AsyncCarbonaware, failures_before_success: int, respx_mock: MockRouter
+        self, async_client: AsyncCarbonawareScheduler, failures_before_success: int, respx_mock: MockRouter
     ) -> None:
         client = async_client.with_options(max_retries=4)
 

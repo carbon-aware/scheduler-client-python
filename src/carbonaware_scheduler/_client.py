@@ -46,19 +46,19 @@ __all__ = [
     "Transport",
     "ProxiesTypes",
     "RequestOptions",
-    "Carbonaware",
-    "AsyncCarbonaware",
+    "CarbonawareScheduler",
+    "AsyncCarbonawareScheduler",
     "Client",
     "AsyncClient",
 ]
 
 
-class Carbonaware(SyncAPIClient):
+class CarbonawareScheduler(SyncAPIClient):
     schedule: schedule.ScheduleResource
     regions: regions.RegionsResource
     health: health.HealthResource
-    with_raw_response: CarbonawareWithRawResponse
-    with_streaming_response: CarbonawareWithStreamedResponse
+    with_raw_response: CarbonawareSchedulerWithRawResponse
+    with_streaming_response: CarbonawareSchedulerWithStreamedResponse
 
     # client options
     api_key: str | None
@@ -86,7 +86,7 @@ class Carbonaware(SyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new synchronous Carbonaware client instance.
+        """Construct a new synchronous CarbonawareScheduler client instance.
 
         This automatically infers the `api_key` argument from the `CARBONAWARE_API_KEY` environment variable if it is not provided.
         """
@@ -95,7 +95,7 @@ class Carbonaware(SyncAPIClient):
         self.api_key = api_key
 
         if base_url is None:
-            base_url = os.environ.get("CARBONAWARE_BASE_URL")
+            base_url = os.environ.get("CARBONAWARE_SCHEDULER_BASE_URL")
         if base_url is None:
             base_url = f"https://api.example.com"
 
@@ -113,8 +113,8 @@ class Carbonaware(SyncAPIClient):
         self.schedule = schedule.ScheduleResource(self)
         self.regions = regions.RegionsResource(self)
         self.health = health.HealthResource(self)
-        self.with_raw_response = CarbonawareWithRawResponse(self)
-        self.with_streaming_response = CarbonawareWithStreamedResponse(self)
+        self.with_raw_response = CarbonawareSchedulerWithRawResponse(self)
+        self.with_streaming_response = CarbonawareSchedulerWithStreamedResponse(self)
 
     @property
     @override
@@ -253,12 +253,12 @@ class Carbonaware(SyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class AsyncCarbonaware(AsyncAPIClient):
+class AsyncCarbonawareScheduler(AsyncAPIClient):
     schedule: schedule.AsyncScheduleResource
     regions: regions.AsyncRegionsResource
     health: health.AsyncHealthResource
-    with_raw_response: AsyncCarbonawareWithRawResponse
-    with_streaming_response: AsyncCarbonawareWithStreamedResponse
+    with_raw_response: AsyncCarbonawareSchedulerWithRawResponse
+    with_streaming_response: AsyncCarbonawareSchedulerWithStreamedResponse
 
     # client options
     api_key: str | None
@@ -286,7 +286,7 @@ class AsyncCarbonaware(AsyncAPIClient):
         # part of our public interface in the future.
         _strict_response_validation: bool = False,
     ) -> None:
-        """Construct a new async AsyncCarbonaware client instance.
+        """Construct a new async AsyncCarbonawareScheduler client instance.
 
         This automatically infers the `api_key` argument from the `CARBONAWARE_API_KEY` environment variable if it is not provided.
         """
@@ -295,7 +295,7 @@ class AsyncCarbonaware(AsyncAPIClient):
         self.api_key = api_key
 
         if base_url is None:
-            base_url = os.environ.get("CARBONAWARE_BASE_URL")
+            base_url = os.environ.get("CARBONAWARE_SCHEDULER_BASE_URL")
         if base_url is None:
             base_url = f"https://api.example.com"
 
@@ -313,8 +313,8 @@ class AsyncCarbonaware(AsyncAPIClient):
         self.schedule = schedule.AsyncScheduleResource(self)
         self.regions = regions.AsyncRegionsResource(self)
         self.health = health.AsyncHealthResource(self)
-        self.with_raw_response = AsyncCarbonawareWithRawResponse(self)
-        self.with_streaming_response = AsyncCarbonawareWithStreamedResponse(self)
+        self.with_raw_response = AsyncCarbonawareSchedulerWithRawResponse(self)
+        self.with_streaming_response = AsyncCarbonawareSchedulerWithStreamedResponse(self)
 
     @property
     @override
@@ -453,8 +453,8 @@ class AsyncCarbonaware(AsyncAPIClient):
         return APIStatusError(err_msg, response=response, body=body)
 
 
-class CarbonawareWithRawResponse:
-    def __init__(self, client: Carbonaware) -> None:
+class CarbonawareSchedulerWithRawResponse:
+    def __init__(self, client: CarbonawareScheduler) -> None:
         self.schedule = schedule.ScheduleResourceWithRawResponse(client.schedule)
         self.regions = regions.RegionsResourceWithRawResponse(client.regions)
         self.health = health.HealthResourceWithRawResponse(client.health)
@@ -464,8 +464,8 @@ class CarbonawareWithRawResponse:
         )
 
 
-class AsyncCarbonawareWithRawResponse:
-    def __init__(self, client: AsyncCarbonaware) -> None:
+class AsyncCarbonawareSchedulerWithRawResponse:
+    def __init__(self, client: AsyncCarbonawareScheduler) -> None:
         self.schedule = schedule.AsyncScheduleResourceWithRawResponse(client.schedule)
         self.regions = regions.AsyncRegionsResourceWithRawResponse(client.regions)
         self.health = health.AsyncHealthResourceWithRawResponse(client.health)
@@ -475,8 +475,8 @@ class AsyncCarbonawareWithRawResponse:
         )
 
 
-class CarbonawareWithStreamedResponse:
-    def __init__(self, client: Carbonaware) -> None:
+class CarbonawareSchedulerWithStreamedResponse:
+    def __init__(self, client: CarbonawareScheduler) -> None:
         self.schedule = schedule.ScheduleResourceWithStreamingResponse(client.schedule)
         self.regions = regions.RegionsResourceWithStreamingResponse(client.regions)
         self.health = health.HealthResourceWithStreamingResponse(client.health)
@@ -486,8 +486,8 @@ class CarbonawareWithStreamedResponse:
         )
 
 
-class AsyncCarbonawareWithStreamedResponse:
-    def __init__(self, client: AsyncCarbonaware) -> None:
+class AsyncCarbonawareSchedulerWithStreamedResponse:
+    def __init__(self, client: AsyncCarbonawareScheduler) -> None:
         self.schedule = schedule.AsyncScheduleResourceWithStreamingResponse(client.schedule)
         self.regions = regions.AsyncRegionsResourceWithStreamingResponse(client.regions)
         self.health = health.AsyncHealthResourceWithStreamingResponse(client.health)
@@ -497,6 +497,6 @@ class AsyncCarbonawareWithStreamedResponse:
         )
 
 
-Client = Carbonaware
+Client = CarbonawareScheduler
 
-AsyncClient = AsyncCarbonaware
+AsyncClient = AsyncCarbonawareScheduler

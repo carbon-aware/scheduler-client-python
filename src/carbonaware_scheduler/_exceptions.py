@@ -18,11 +18,11 @@ __all__ = [
 ]
 
 
-class CarbonawareError(Exception):
+class CarbonawareSchedulerError(Exception):
     pass
 
 
-class APIError(CarbonawareError):
+class APIError(CarbonawareSchedulerError):
     message: str
     request: httpx.Request
 
