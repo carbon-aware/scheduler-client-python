@@ -21,19 +21,19 @@ import pytest
 from respx import MockRouter
 from pydantic import ValidationError
 
-from carbonaware import Carbonaware, AsyncCarbonaware, APIResponseValidationError
-from carbonaware._types import Omit
-from carbonaware._utils import parse_datetime, maybe_transform
-from carbonaware._models import BaseModel, FinalRequestOptions
-from carbonaware._constants import RAW_RESPONSE_HEADER
-from carbonaware._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
-from carbonaware._base_client import (
+from carbonaware_scheduler import Carbonaware, AsyncCarbonaware, APIResponseValidationError
+from carbonaware_scheduler._types import Omit
+from carbonaware_scheduler._utils import parse_datetime, maybe_transform
+from carbonaware_scheduler._models import BaseModel, FinalRequestOptions
+from carbonaware_scheduler._constants import RAW_RESPONSE_HEADER
+from carbonaware_scheduler._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
+from carbonaware_scheduler._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
     make_request_options,
 )
-from carbonaware.types.schedule_create_params import ScheduleCreateParams
+from carbonaware_scheduler.types.schedule_create_params import ScheduleCreateParams
 
 from .utils import update_env
 
@@ -232,10 +232,10 @@ class TestCarbonaware:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "carbonaware/_legacy_response.py",
-                        "carbonaware/_response.py",
+                        "carbonaware_scheduler/_legacy_response.py",
+                        "carbonaware_scheduler/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "carbonaware/_compat.py",
+                        "carbonaware_scheduler/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -730,7 +730,7 @@ class TestCarbonaware:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v0/schedule/").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -765,7 +765,7 @@ class TestCarbonaware:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v0/schedule/").mock(return_value=httpx.Response(500))
@@ -801,7 +801,7 @@ class TestCarbonaware:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
@@ -846,7 +846,7 @@ class TestCarbonaware:
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
         self, client: Carbonaware, failures_before_success: int, respx_mock: MockRouter
@@ -884,7 +884,7 @@ class TestCarbonaware:
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
         self, client: Carbonaware, failures_before_success: int, respx_mock: MockRouter
@@ -1097,10 +1097,10 @@ class TestAsyncCarbonaware:
                         # to_raw_response_wrapper leaks through the @functools.wraps() decorator.
                         #
                         # removing the decorator fixes the leak for reasons we don't understand.
-                        "carbonaware/_legacy_response.py",
-                        "carbonaware/_response.py",
+                        "carbonaware_scheduler/_legacy_response.py",
+                        "carbonaware_scheduler/_response.py",
                         # pydantic.BaseModel.model_dump || pydantic.BaseModel.dict leak memory for some reason.
-                        "carbonaware/_compat.py",
+                        "carbonaware_scheduler/_compat.py",
                         # Standard library leaks we don't care about.
                         "/logging/__init__.py",
                     ]
@@ -1599,7 +1599,7 @@ class TestAsyncCarbonaware:
         calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
         assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v0/schedule/").mock(side_effect=httpx.TimeoutException("Test timeout error"))
@@ -1634,7 +1634,7 @@ class TestAsyncCarbonaware:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/v0/schedule/").mock(return_value=httpx.Response(500))
@@ -1670,7 +1670,7 @@ class TestAsyncCarbonaware:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
@@ -1716,7 +1716,7 @@ class TestAsyncCarbonaware:
         assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_omit_retry_count_header(
@@ -1755,7 +1755,7 @@ class TestAsyncCarbonaware:
         assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("carbonaware._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_overwrite_retry_count_header(
@@ -1804,8 +1804,8 @@ class TestAsyncCarbonaware:
         import nest_asyncio
         import threading
 
-        from carbonaware._utils import asyncify
-        from carbonaware._base_client import get_platform
+        from carbonaware_scheduler._utils import asyncify
+        from carbonaware_scheduler._base_client import get_platform
 
         async def test_main() -> None:
             result = await asyncify(get_platform)()

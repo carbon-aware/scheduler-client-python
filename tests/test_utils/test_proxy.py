@@ -2,7 +2,7 @@ import operator
 from typing import Any
 from typing_extensions import override
 
-from carbonaware._utils import LazyProxy
+from carbonaware_scheduler._utils import LazyProxy
 
 
 class RecursiveLazyProxy(LazyProxy[Any]):

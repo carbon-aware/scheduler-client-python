@@ -1,6 +1,6 @@
 # Carbonaware Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/carbonaware.svg)](https://pypi.org/project/carbonaware/)
+[![PyPI version](https://img.shields.io/pypi/v/carbonaware-scheduler.svg)](https://pypi.org/project/carbonaware-scheduler/)
 
 The Carbonaware Python library provides convenient access to the Carbonaware REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
@@ -20,7 +20,7 @@ pip install git+ssh://git@github.com/stainless-sdks/carbonaware-python.git
 ```
 
 > [!NOTE]
-> Once this package is [published to PyPI](https://app.stainless.com/docs/guides/publish), this will become: `pip install --pre carbonaware`
+> Once this package is [published to PyPI](https://app.stainless.com/docs/guides/publish), this will become: `pip install --pre carbonaware-scheduler`
 
 ## Usage
 
@@ -29,7 +29,7 @@ The full API of this library can be found in [api.md](api.md).
 ```python
 import os
 from datetime import datetime
-from carbonaware import Carbonaware
+from carbonaware_scheduler import Carbonaware
 
 client = Carbonaware(
     api_key=os.environ.get("CARBONAWARE_API_KEY"),  # This is the default and can be omitted
@@ -66,7 +66,7 @@ Simply import `AsyncCarbonaware` instead of `Carbonaware` and use `await` with e
 import os
 from datetime import datetime
 import asyncio
-from carbonaware import AsyncCarbonaware
+from carbonaware_scheduler import AsyncCarbonaware
 
 client = AsyncCarbonaware(
     api_key=os.environ.get("CARBONAWARE_API_KEY"),  # This is the default and can be omitted
@@ -108,18 +108,18 @@ Typed requests and responses provide autocomplete and documentation within your 
 
 ## Handling errors
 
-When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `carbonaware.APIConnectionError` is raised.
+When the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `carbonaware_scheduler.APIConnectionError` is raised.
 
 When the API returns a non-success status code (that is, 4xx or 5xx
-response), a subclass of `carbonaware.APIStatusError` is raised, containing `status_code` and `response` properties.
+response), a subclass of `carbonaware_scheduler.APIStatusError` is raised, containing `status_code` and `response` properties.
 
-All errors inherit from `carbonaware.APIError`.
+All errors inherit from `carbonaware_scheduler.APIError`.
 
 ```python
 from datetime import datetime
 
-import carbonaware
-from carbonaware import Carbonaware
+import carbonaware_scheduler
+from carbonaware_scheduler import Carbonaware
 
 client = Carbonaware()
 
@@ -139,12 +139,12 @@ try:
             }
         ],
     )
-except carbonaware.APIConnectionError as e:
+except carbonaware_scheduler.APIConnectionError as e:
     print("The server could not be reached")
     print(e.__cause__)  # an underlying Exception, likely raised within httpx.
-except carbonaware.RateLimitError as e:
+except carbonaware_scheduler.RateLimitError as e:
     print("A 429 status code was received; we should back off a bit.")
-except carbonaware.APIStatusError as e:
+except carbonaware_scheduler.APIStatusError as e:
     print("Another non-200-range status code was received")
     print(e.status_code)
     print(e.response)
@@ -174,7 +174,7 @@ You can use the `max_retries` option to configure or disable retry settings:
 ```python
 from datetime import datetime
 
-from carbonaware import Carbonaware
+from carbonaware_scheduler import Carbonaware
 
 # Configure the default for all requests:
 client = Carbonaware(
@@ -208,7 +208,7 @@ which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advan
 ```python
 from datetime import datetime
 
-from carbonaware import Carbonaware
+from carbonaware_scheduler import Carbonaware
 
 # Configure the default for all requests:
 client = Carbonaware(
@@ -276,7 +276,7 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 ```py
 from datetime import datetime
 
-from carbonaware import Carbonaware
+from carbonaware_scheduler import Carbonaware
 
 client = Carbonaware()
 response = client.schedule.with_raw_response.create(
@@ -298,9 +298,9 @@ print(schedule.ideal)
 
 from datetime import datetime
 
-These methods return an [`APIResponse`](https://github.com/stainless-sdks/carbonaware-python/tree/main/src/carbonaware/_response.py) object.
+These methods return an [`APIResponse`](https://github.com/stainless-sdks/carbonaware-python/tree/main/src/carbonaware_scheduler/_response.py) object.
 
-The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/carbonaware-python/tree/main/src/carbonaware/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
+The async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/carbonaware-python/tree/main/src/carbonaware_scheduler/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.
 
 #### `.with_streaming_response`
 
@@ -376,7 +376,7 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from carbonaware import Carbonaware, DefaultHttpxClient
+from carbonaware_scheduler import Carbonaware, DefaultHttpxClient
 
 client = Carbonaware(
     # Or use the `CARBONAWARE_BASE_URL` env var
@@ -399,7 +399,7 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from carbonaware import Carbonaware
+from carbonaware_scheduler import Carbonaware
 
 with Carbonaware() as client:
   # make requests here
@@ -427,8 +427,8 @@ If you've upgraded to the latest version but aren't seeing any new features you 
 You can determine the version that is being used at runtime with:
 
 ```py
-import carbonaware
-print(carbonaware.__version__)
+import carbonaware_scheduler
+print(carbonaware_scheduler.__version__)
 ```
 
 ## Requirements

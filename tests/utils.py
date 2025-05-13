@@ -8,8 +8,8 @@ from typing import Any, TypeVar, Iterator, cast
 from datetime import date, datetime
 from typing_extensions import Literal, get_args, get_origin, assert_type
 
-from carbonaware._types import Omit, NoneType
-from carbonaware._utils import (
+from carbonaware_scheduler._types import Omit, NoneType
+from carbonaware_scheduler._utils import (
     is_dict,
     is_list,
     is_list_type,
@@ -18,8 +18,8 @@ from carbonaware._utils import (
     is_annotated_type,
     is_type_alias_type,
 )
-from carbonaware._compat import PYDANTIC_V2, field_outer_type, get_model_fields
-from carbonaware._models import BaseModel
+from carbonaware_scheduler._compat import PYDANTIC_V2, field_outer_type, get_model_fields
+from carbonaware_scheduler._models import BaseModel
 
 BaseModelT = TypeVar("BaseModelT", bound=BaseModel)
 

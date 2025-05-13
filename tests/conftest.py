@@ -7,14 +7,14 @@ from typing import TYPE_CHECKING, Iterator, AsyncIterator
 import pytest
 from pytest_asyncio import is_async_test
 
-from carbonaware import Carbonaware, AsyncCarbonaware
+from carbonaware_scheduler import Carbonaware, AsyncCarbonaware
 
 if TYPE_CHECKING:
     from _pytest.fixtures import FixtureRequest  # pyright: ignore[reportPrivateImportUsage]
 
 pytest.register_assert_rewrite("tests.utils")
 
-logging.getLogger("carbonaware").setLevel(logging.DEBUG)
+logging.getLogger("carbonaware_scheduler").setLevel(logging.DEBUG)
 
 
 # automatically add `pytest.mark.asyncio()` to all of our async tests

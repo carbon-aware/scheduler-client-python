@@ -7,9 +7,9 @@ from typing import Any, cast
 
 import pytest
 
-from carbonaware import Carbonaware, AsyncCarbonaware
 from tests.utils import assert_matches_type
-from carbonaware.types import RegionListResponse
+from carbonaware_scheduler import Carbonaware, AsyncCarbonaware
+from carbonaware_scheduler.types import RegionListResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
