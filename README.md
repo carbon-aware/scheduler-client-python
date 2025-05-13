@@ -1,8 +1,8 @@
-# Carbonaware Python API library
+# Carbonaware Scheduler Python API library
 
 [![PyPI version](https://img.shields.io/pypi/v/carbonaware-scheduler.svg)](https://pypi.org/project/carbonaware-scheduler/)
 
-The Carbonaware Python library provides convenient access to the Carbonaware REST API from any Python 3.8+
+The Carbonaware Scheduler Python library provides convenient access to the Carbonaware Scheduler REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -29,9 +29,9 @@ The full API of this library can be found in [api.md](api.md).
 ```python
 import os
 from datetime import datetime
-from carbonaware_scheduler import Carbonaware
+from carbonaware_scheduler import CarbonawareScheduler
 
-client = Carbonaware(
+client = CarbonawareScheduler(
     api_key=os.environ.get("CARBONAWARE_API_KEY"),  # This is the default and can be omitted
 )
 
@@ -60,15 +60,15 @@ so that your API Key is not stored in source control.
 
 ## Async usage
 
-Simply import `AsyncCarbonaware` instead of `Carbonaware` and use `await` with each API call:
+Simply import `AsyncCarbonawareScheduler` instead of `CarbonawareScheduler` and use `await` with each API call:
 
 ```python
 import os
 from datetime import datetime
 import asyncio
-from carbonaware_scheduler import AsyncCarbonaware
+from carbonaware_scheduler import AsyncCarbonawareScheduler
 
-client = AsyncCarbonaware(
+client = AsyncCarbonawareScheduler(
     api_key=os.environ.get("CARBONAWARE_API_KEY"),  # This is the default and can be omitted
 )
 
@@ -119,9 +119,9 @@ All errors inherit from `carbonaware_scheduler.APIError`.
 from datetime import datetime
 
 import carbonaware_scheduler
-from carbonaware_scheduler import Carbonaware
+from carbonaware_scheduler import CarbonawareScheduler
 
-client = Carbonaware()
+client = CarbonawareScheduler()
 
 try:
     client.schedule.create(
@@ -174,10 +174,10 @@ You can use the `max_retries` option to configure or disable retry settings:
 ```python
 from datetime import datetime
 
-from carbonaware_scheduler import Carbonaware
+from carbonaware_scheduler import CarbonawareScheduler
 
 # Configure the default for all requests:
-client = Carbonaware(
+client = CarbonawareScheduler(
     # default is 2
     max_retries=0,
 )
@@ -208,16 +208,16 @@ which accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advan
 ```python
 from datetime import datetime
 
-from carbonaware_scheduler import Carbonaware
+from carbonaware_scheduler import CarbonawareScheduler
 
 # Configure the default for all requests:
-client = Carbonaware(
+client = CarbonawareScheduler(
     # 20 seconds (default is 1 minute)
     timeout=20.0,
 )
 
 # More granular control:
-client = Carbonaware(
+client = CarbonawareScheduler(
     timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),
 )
 
@@ -249,10 +249,10 @@ Note that requests that time out are [retried twice by default](#retries).
 
 We use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.
 
-You can enable logging by setting the environment variable `CARBONAWARE_LOG` to `info`.
+You can enable logging by setting the environment variable `CARBONAWARE_SCHEDULER_LOG` to `info`.
 
 ```shell
-$ export CARBONAWARE_LOG=info
+$ export CARBONAWARE_SCHEDULER_LOG=info
 ```
 
 Or to `debug` for more verbose logging.
@@ -276,9 +276,9 @@ The "raw" Response object can be accessed by prefixing `.with_raw_response.` to 
 ```py
 from datetime import datetime
 
-from carbonaware_scheduler import Carbonaware
+from carbonaware_scheduler import CarbonawareScheduler
 
-client = Carbonaware()
+client = CarbonawareScheduler()
 response = client.schedule.with_raw_response.create(
     duration="duration",
     windows=[{
@@ -376,10 +376,10 @@ You can directly override the [httpx client](https://www.python-httpx.org/api/#c
 
 ```python
 import httpx
-from carbonaware_scheduler import Carbonaware, DefaultHttpxClient
+from carbonaware_scheduler import CarbonawareScheduler, DefaultHttpxClient
 
-client = Carbonaware(
-    # Or use the `CARBONAWARE_BASE_URL` env var
+client = CarbonawareScheduler(
+    # Or use the `CARBONAWARE_SCHEDULER_BASE_URL` env var
     base_url="http://my.test.server.example.com:8083",
     http_client=DefaultHttpxClient(
         proxy="http://my.test.proxy.example.com",
@@ -399,9 +399,9 @@ client.with_options(http_client=DefaultHttpxClient(...))
 By default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.
 
 ```py
-from carbonaware_scheduler import Carbonaware
+from carbonaware_scheduler import CarbonawareScheduler
 
-with Carbonaware() as client:
+with CarbonawareScheduler() as client:
   # make requests here
   ...
 

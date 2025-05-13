@@ -8,7 +8,7 @@ from typing import Any, cast
 import pytest
 
 from tests.utils import assert_matches_type
-from carbonaware_scheduler import Carbonaware, AsyncCarbonaware
+from carbonaware_scheduler import CarbonawareScheduler, AsyncCarbonawareScheduler
 from carbonaware_scheduler.types import HealthCheckResponse
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -19,13 +19,13 @@ class TestHealth:
 
     @pytest.mark.skip()
     @parametrize
-    def test_method_check(self, client: Carbonaware) -> None:
+    def test_method_check(self, client: CarbonawareScheduler) -> None:
         health = client.health.check()
         assert_matches_type(HealthCheckResponse, health, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    def test_raw_response_check(self, client: Carbonaware) -> None:
+    def test_raw_response_check(self, client: CarbonawareScheduler) -> None:
         response = client.health.with_raw_response.check()
 
         assert response.is_closed is True
@@ -35,7 +35,7 @@ class TestHealth:
 
     @pytest.mark.skip()
     @parametrize
-    def test_streaming_response_check(self, client: Carbonaware) -> None:
+    def test_streaming_response_check(self, client: CarbonawareScheduler) -> None:
         with client.health.with_streaming_response.check() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -51,13 +51,13 @@ class TestAsyncHealth:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_method_check(self, async_client: AsyncCarbonaware) -> None:
+    async def test_method_check(self, async_client: AsyncCarbonawareScheduler) -> None:
         health = await async_client.health.check()
         assert_matches_type(HealthCheckResponse, health, path=["response"])
 
     @pytest.mark.skip()
     @parametrize
-    async def test_raw_response_check(self, async_client: AsyncCarbonaware) -> None:
+    async def test_raw_response_check(self, async_client: AsyncCarbonawareScheduler) -> None:
         response = await async_client.health.with_raw_response.check()
 
         assert response.is_closed is True
@@ -67,7 +67,7 @@ class TestAsyncHealth:
 
     @pytest.mark.skip()
     @parametrize
-    async def test_streaming_response_check(self, async_client: AsyncCarbonaware) -> None:
+    async def test_streaming_response_check(self, async_client: AsyncCarbonawareScheduler) -> None:
         async with async_client.health.with_streaming_response.check() as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
