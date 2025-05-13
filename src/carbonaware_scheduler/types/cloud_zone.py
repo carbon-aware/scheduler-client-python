@@ -15,6 +15,7 @@ class CloudZone(BaseModel):
         "us-west-1",
         "eu-central-1",
         "ap-southeast-2",
+        "us-central1",
         "eastus",
         "eastus2",
         "southcentralus",
