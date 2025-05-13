@@ -5,7 +5,7 @@ description = "The official Python library for the carbonaware-scheduler API"
 dynamic = ["readme"]
 license = "Apache-2.0"
 authors = [
-{ name = "Carbonaware Scheduler", email = "" },
+{ name = "Carbonaware Scheduler", email = "ryan@carbonaware.dev" },
 ]
 dependencies = [
     "httpx>=0.23.0, <1",
