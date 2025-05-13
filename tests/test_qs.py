@@ -4,7 +4,7 @@ from urllib.parse import unquote
 
 import pytest
 
-from carbonaware._qs import Querystring, stringify
+from carbonaware_scheduler._qs import Querystring, stringify
 
 
 def test_empty() -> None:

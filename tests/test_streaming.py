@@ -5,8 +5,8 @@ from typing import Iterator, AsyncIterator
 import httpx
 import pytest
 
-from carbonaware import Carbonaware, AsyncCarbonaware
-from carbonaware._streaming import Stream, AsyncStream, ServerSentEvent
+from carbonaware_scheduler import Carbonaware, AsyncCarbonaware
+from carbonaware_scheduler._streaming import Stream, AsyncStream, ServerSentEvent
 
 
 @pytest.mark.asyncio

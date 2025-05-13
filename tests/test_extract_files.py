@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pytest
 
-from carbonaware._types import FileTypes
-from carbonaware._utils import extract_files
+from carbonaware_scheduler._types import FileTypes
+from carbonaware_scheduler._utils import extract_files
 
 
 def test_removes_files_from_input() -> None:

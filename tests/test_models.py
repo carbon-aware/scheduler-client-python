@@ -7,9 +7,9 @@ import pytest
 import pydantic
 from pydantic import Field
 
-from carbonaware._utils import PropertyInfo
-from carbonaware._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
-from carbonaware._models import BaseModel, construct_type
+from carbonaware_scheduler._utils import PropertyInfo
+from carbonaware_scheduler._compat import PYDANTIC_V2, parse_obj, model_dump, model_json
+from carbonaware_scheduler._models import BaseModel, construct_type
 
 
 class BasicModel(BaseModel):
