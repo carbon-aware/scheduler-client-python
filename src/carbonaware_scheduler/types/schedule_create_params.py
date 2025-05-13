@@ -16,6 +16,7 @@ class ScheduleCreateParams(TypedDict, total=False):
     duration: Required[str]
 
     windows: Required[Iterable[Window]]
+    """List of time windows to schedule (start and end must be in the future)"""
 
     zones: Required[Iterable[CloudZoneParam]]
 
