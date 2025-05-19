@@ -1,5 +1,7 @@
 import logging
+
 import httpx
+
 from ..types.cloud_zone import CloudZone
 
 AWS_METADATA_URL = "http://169.254.169.254/latest/meta-data"
