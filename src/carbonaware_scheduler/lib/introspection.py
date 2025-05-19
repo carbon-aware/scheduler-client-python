@@ -17,7 +17,7 @@ def detect_cloud_zone() -> CloudZone:
         az = httpx.get(f"{AWS_METADATA_URL}/placement/availability-zone", timeout=0.5).text
         logger.debug(f"Detected AWS zone: {az}")
         region = az[:-1]
-        return CloudZone(provider="aws", region=region)
+        return CloudZone(provider="aws", region=region) # type: ignore
     except Exception:
         pass
 
@@ -31,7 +31,7 @@ def detect_cloud_zone() -> CloudZone:
         )
         region = response.text.strip().replace('"', '')
         logger.debug(f"Detected Azure region: {region}")
-        return CloudZone(provider="azure", region=region)
+        return CloudZone(provider="azure", region=region) # type: ignore
     except Exception:
         pass
 
@@ -44,7 +44,7 @@ def detect_cloud_zone() -> CloudZone:
         ).text
         region = zone_path.split("/")[-1][:-2]  # zones/us-central1-a → us-central1
         logger.debug(f"Detected GCP region: {region}")
-        return CloudZone(provider="gcp", region=region)
+        return CloudZone(provider="gcp", region=region) # type: ignore
     except Exception:
         pass
 
