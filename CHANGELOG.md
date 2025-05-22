@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.1 (2025-05-22)
+
+Full Changelog: [v1.2.0...v1.2.1](https://github.com/carbon-aware/scheduler-client-python/compare/v1.2.0...v1.2.1)
+
+### Chores
+
+* **docs:** grammar improvements ([62aa0af](https://github.com/carbon-aware/scheduler-client-python/commit/62aa0aff4e174dcd21ae48db3785f0c58c46b408))
+
 ## 1.2.0 (2025-05-19)
 
 Full Changelog: [v1.1.0...v1.2.0](https://github.com/carbon-aware/scheduler-client-python/compare/v1.1.0...v1.2.0)
