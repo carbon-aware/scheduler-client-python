@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.3.0 (2025-06-03)
+
+Full Changelog: [v1.2.0...v1.3.0](https://github.com/carbon-aware/scheduler-client-python/compare/v1.2.0...v1.3.0)
+
+### Features
+
+* **api:** api update ([8cc8df3](https://github.com/carbon-aware/scheduler-client-python/commit/8cc8df3fcbfe677cd069de8b74803946c5645450))
+* **client:** add follow_redirects request option ([830a823](https://github.com/carbon-aware/scheduler-client-python/commit/830a8231e5609f8db0f50465b104da5dd594f3b1))
+
+
+### Chores
+
+* **docs:** grammar improvements ([62aa0af](https://github.com/carbon-aware/scheduler-client-python/commit/62aa0aff4e174dcd21ae48db3785f0c58c46b408))
+* **docs:** remove reference to rye shell ([4c54074](https://github.com/carbon-aware/scheduler-client-python/commit/4c54074bb4c25aff6fbdeff729d7a8e3ce8e63f5))
+
 ## 1.2.0 (2025-05-19)
 
 Full Changelog: [v1.1.0...v1.2.0](https://github.com/carbon-aware/scheduler-client-python/compare/v1.1.0...v1.2.0)
