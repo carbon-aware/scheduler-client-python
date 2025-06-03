@@ -701,7 +701,7 @@ class TestCarbonawareScheduler:
                             zones=[
                                 {
                                     "provider": "aws",
-                                    "region": "us-east-1",
+                                    "region": "af-south-1",
                                 }
                             ],
                         ),
@@ -736,7 +736,7 @@ class TestCarbonawareScheduler:
                             zones=[
                                 {
                                     "provider": "aws",
-                                    "region": "us-east-1",
+                                    "region": "af-south-1",
                                 }
                             ],
                         ),
@@ -786,7 +786,7 @@ class TestCarbonawareScheduler:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
         )
@@ -824,7 +824,7 @@ class TestCarbonawareScheduler:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
             extra_headers={"x-stainless-retry-count": Omit()},
@@ -862,7 +862,7 @@ class TestCarbonawareScheduler:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
             extra_headers={"x-stainless-retry-count": "42"},
@@ -1557,7 +1557,7 @@ class TestAsyncCarbonawareScheduler:
                             zones=[
                                 {
                                     "provider": "aws",
-                                    "region": "us-east-1",
+                                    "region": "af-south-1",
                                 }
                             ],
                         ),
@@ -1592,7 +1592,7 @@ class TestAsyncCarbonawareScheduler:
                             zones=[
                                 {
                                     "provider": "aws",
-                                    "region": "us-east-1",
+                                    "region": "af-south-1",
                                 }
                             ],
                         ),
@@ -1643,7 +1643,7 @@ class TestAsyncCarbonawareScheduler:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
         )
@@ -1682,7 +1682,7 @@ class TestAsyncCarbonawareScheduler:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
             extra_headers={"x-stainless-retry-count": Omit()},
@@ -1721,7 +1721,7 @@ class TestAsyncCarbonawareScheduler:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
             extra_headers={"x-stainless-retry-count": "42"},
