@@ -32,7 +32,7 @@ class TestSchedule:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
         )
@@ -52,7 +52,7 @@ class TestSchedule:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
             num_options=0,
@@ -73,7 +73,7 @@ class TestSchedule:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
         )
@@ -97,7 +97,7 @@ class TestSchedule:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
         ) as response:
@@ -127,7 +127,7 @@ class TestAsyncSchedule:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
         )
@@ -147,7 +147,7 @@ class TestAsyncSchedule:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
             num_options=0,
@@ -168,7 +168,7 @@ class TestAsyncSchedule:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
         )
@@ -192,7 +192,7 @@ class TestAsyncSchedule:
             zones=[
                 {
                     "provider": "aws",
-                    "region": "us-east-1",
+                    "region": "af-south-1",
                 }
             ],
         ) as response:
