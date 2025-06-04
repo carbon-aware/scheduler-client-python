@@ -40,7 +40,7 @@ schedule = client.schedule.create(
     zones=[
         {
             "provider": "aws",
-            "region": "us-east-1",
+            "region": "af-south-1",
         }
     ],
 )
@@ -71,7 +71,7 @@ async def main() -> None:
         zones=[
             {
                 "provider": "aws",
-                "region": "us-east-1",
+                "region": "af-south-1",
             }
         ],
     )
@@ -121,7 +121,7 @@ try:
         zones=[
             {
                 "provider": "aws",
-                "region": "us-east-1",
+                "region": "af-south-1",
             }
         ],
     )
@@ -180,7 +180,7 @@ client.with_options(max_retries=5).schedule.create(
     zones=[
         {
             "provider": "aws",
-            "region": "us-east-1",
+            "region": "af-south-1",
         }
     ],
 )
@@ -219,7 +219,7 @@ client.with_options(timeout=5.0).schedule.create(
     zones=[
         {
             "provider": "aws",
-            "region": "us-east-1",
+            "region": "af-south-1",
         }
     ],
 )
@@ -273,7 +273,7 @@ response = client.schedule.with_raw_response.create(
     }],
     zones=[{
         "provider": "aws",
-        "region": "us-east-1",
+        "region": "af-south-1",
     }],
 )
 print(response.headers.get('X-My-Header'))
@@ -306,7 +306,7 @@ with client.schedule.with_streaming_response.create(
     zones=[
         {
             "provider": "aws",
-            "region": "us-east-1",
+            "region": "af-south-1",
         }
     ],
 ) as response:
