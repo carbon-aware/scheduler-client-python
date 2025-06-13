@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.1 (2025-06-13)
+
+Full Changelog: [v1.3.0...v1.3.1](https://github.com/carbon-aware/scheduler-client-python/compare/v1.3.0...v1.3.1)
+
+### Bug Fixes
+
+* **client:** correctly parse binary response | stream ([77d44c4](https://github.com/carbon-aware/scheduler-client-python/commit/77d44c4bd4f8f5f4e5de983f024bee2aa9248ed7))
+
+
+### Chores
+
+* **tests:** run tests in parallel ([9cff641](https://github.com/carbon-aware/scheduler-client-python/commit/9cff6410f6bc5a1a37f2037c6868d92e46c5d8a9))
+
 ## 1.3.0 (2025-06-03)
 
 Full Changelog: [v1.2.0...v1.3.0](https://github.com/carbon-aware/scheduler-client-python/compare/v1.2.0...v1.3.0)
