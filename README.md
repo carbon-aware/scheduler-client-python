@@ -1,6 +1,6 @@
 # Carbonaware Scheduler Python API library
 
-[![PyPI version](https://img.shields.io/pypi/v/carbonaware-scheduler-client.svg)](https://pypi.org/project/carbonaware-scheduler-client/)
+[![PyPI version](<https://img.shields.io/pypi/v/carbonaware-scheduler-client.svg?label=pypi%20(stable)>)](https://pypi.org/project/carbonaware-scheduler-client/)
 
 The Carbonaware Scheduler Python library provides convenient access to the Carbonaware Scheduler REST API from any Python 3.8+
 application. The library includes type definitions for all request params and response fields,
