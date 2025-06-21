@@ -83,6 +83,51 @@ asyncio.run(main())
 
 Functionality between the synchronous and asynchronous clients is otherwise identical.
 
+### With aiohttp
+
+By default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.
+
+You can enable this by installing `aiohttp`:
+
+```sh
+# install from PyPI
+pip install carbonaware-scheduler-client[aiohttp]
+```
+
+Then you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:
+
+```python
+import asyncio
+from carbonaware_scheduler import DefaultAioHttpClient
+from datetime import datetime
+from carbonaware_scheduler import AsyncCarbonawareScheduler
+
+
+async def main() -> None:
+    async with AsyncCarbonawareScheduler(
+        http_client=DefaultAioHttpClient(),
+    ) as client:
+        schedule = await client.schedule.create(
+            duration="PT1H",
+            windows=[
+                {
+                    "end": datetime.fromisoformat("2019-12-27T18:11:19.117"),
+                    "start": datetime.fromisoformat("2019-12-27T18:11:19.117"),
+                }
+            ],
+            zones=[
+                {
+                    "provider": "aws",
+                    "region": "af-south-1",
+                }
+            ],
+        )
+        print(schedule.ideal)
+
+
+asyncio.run(main())
+```
+
 ## Using types
 
 Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:
