@@ -23,17 +23,17 @@ from pydantic import ValidationError
 
 from carbonaware_scheduler import CarbonawareScheduler, AsyncCarbonawareScheduler, APIResponseValidationError
 from carbonaware_scheduler._types import Omit
-from carbonaware_scheduler._utils import parse_datetime, maybe_transform
+from carbonaware_scheduler._utils import parse_datetime
 from carbonaware_scheduler._models import BaseModel, FinalRequestOptions
-from carbonaware_scheduler._constants import RAW_RESPONSE_HEADER
 from carbonaware_scheduler._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
 from carbonaware_scheduler._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
     BaseClient,
+    DefaultHttpxClient,
+    DefaultAsyncHttpxClient,
     make_request_options,
 )
-from carbonaware_scheduler.types.schedule_create_params import ScheduleCreateParams
 
 from .utils import update_env
 
@@ -185,6 +185,7 @@ class TestCarbonawareScheduler:
             copy_param = copy_signature.parameters.get(name)
             assert copy_param is not None, f"copy() signature is missing the {name} param"
 
+    @pytest.mark.skipif(sys.version_info >= (3, 10), reason="fails because of a memory leak that started from 3.12")
     def test_copy_build_request(self) -> None:
         options = FinalRequestOptions(method="get", url="/foo")
 
@@ -681,72 +682,49 @@ class TestCarbonawareScheduler:
 
     @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter, client: CarbonawareScheduler) -> None:
         respx_mock.post("/v0/schedule/").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            self.client.post(
-                "/v0/schedule/",
-                body=cast(
-                    object,
-                    maybe_transform(
-                        dict(
-                            duration="PT1H",
-                            windows=[
-                                {
-                                    "end": parse_datetime("2019-12-27T18:11:19.117Z"),
-                                    "start": parse_datetime("2019-12-27T18:11:19.117Z"),
-                                }
-                            ],
-                            zones=[
-                                {
-                                    "provider": "aws",
-                                    "region": "af-south-1",
-                                }
-                            ],
-                        ),
-                        ScheduleCreateParams,
-                    ),
-                ),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
+            client.schedule.with_streaming_response.create(
+                duration="PT1H",
+                windows=[
+                    {
+                        "end": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        "start": parse_datetime("2019-12-27T18:11:19.117Z"),
+                    }
+                ],
+                zones=[
+                    {
+                        "provider": "aws",
+                        "region": "af-south-1",
+                    }
+                ],
+            ).__enter__()
 
         assert _get_open_connections(self.client) == 0
 
     @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter, client: CarbonawareScheduler) -> None:
         respx_mock.post("/v0/schedule/").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            self.client.post(
-                "/v0/schedule/",
-                body=cast(
-                    object,
-                    maybe_transform(
-                        dict(
-                            duration="PT1H",
-                            windows=[
-                                {
-                                    "end": parse_datetime("2019-12-27T18:11:19.117Z"),
-                                    "start": parse_datetime("2019-12-27T18:11:19.117Z"),
-                                }
-                            ],
-                            zones=[
-                                {
-                                    "provider": "aws",
-                                    "region": "af-south-1",
-                                }
-                            ],
-                        ),
-                        ScheduleCreateParams,
-                    ),
-                ),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
-
+            client.schedule.with_streaming_response.create(
+                duration="PT1H",
+                windows=[
+                    {
+                        "end": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        "start": parse_datetime("2019-12-27T18:11:19.117Z"),
+                    }
+                ],
+                zones=[
+                    {
+                        "provider": "aws",
+                        "region": "af-south-1",
+                    }
+                ],
+            ).__enter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -869,6 +847,28 @@ class TestCarbonawareScheduler:
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
+
+    def test_proxy_environment_variables(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # Test that the proxy environment variables are set correctly
+        monkeypatch.setenv("HTTPS_PROXY", "https://example.org")
+
+        client = DefaultHttpxClient()
+
+        mounts = tuple(client._mounts.items())
+        assert len(mounts) == 1
+        assert mounts[0][0].pattern == "https://"
+
+    @pytest.mark.filterwarnings("ignore:.*deprecated.*:DeprecationWarning")
+    def test_default_client_creation(self) -> None:
+        # Ensure that the client can be initialized without any exceptions
+        DefaultHttpxClient(
+            verify=True,
+            cert=None,
+            trust_env=True,
+            http1=True,
+            http2=False,
+            limits=httpx.Limits(max_connections=100, max_keepalive_connections=20),
+        )
 
     @pytest.mark.respx(base_url=base_url)
     def test_follow_redirects(self, respx_mock: MockRouter) -> None:
@@ -1029,6 +1029,7 @@ class TestAsyncCarbonawareScheduler:
             copy_param = copy_signature.parameters.get(name)
             assert copy_param is not None, f"copy() signature is missing the {name} param"
 
+    @pytest.mark.skipif(sys.version_info >= (3, 10), reason="fails because of a memory leak that started from 3.12")
     def test_copy_build_request(self) -> None:
         options = FinalRequestOptions(method="get", url="/foo")
 
@@ -1537,72 +1538,53 @@ class TestAsyncCarbonawareScheduler:
 
     @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    async def test_retrying_timeout_errors_doesnt_leak(
+        self, respx_mock: MockRouter, async_client: AsyncCarbonawareScheduler
+    ) -> None:
         respx_mock.post("/v0/schedule/").mock(side_effect=httpx.TimeoutException("Test timeout error"))
 
         with pytest.raises(APITimeoutError):
-            await self.client.post(
-                "/v0/schedule/",
-                body=cast(
-                    object,
-                    maybe_transform(
-                        dict(
-                            duration="PT1H",
-                            windows=[
-                                {
-                                    "end": parse_datetime("2019-12-27T18:11:19.117Z"),
-                                    "start": parse_datetime("2019-12-27T18:11:19.117Z"),
-                                }
-                            ],
-                            zones=[
-                                {
-                                    "provider": "aws",
-                                    "region": "af-south-1",
-                                }
-                            ],
-                        ),
-                        ScheduleCreateParams,
-                    ),
-                ),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
+            await async_client.schedule.with_streaming_response.create(
+                duration="PT1H",
+                windows=[
+                    {
+                        "end": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        "start": parse_datetime("2019-12-27T18:11:19.117Z"),
+                    }
+                ],
+                zones=[
+                    {
+                        "provider": "aws",
+                        "region": "af-south-1",
+                    }
+                ],
+            ).__aenter__()
 
         assert _get_open_connections(self.client) == 0
 
     @mock.patch("carbonaware_scheduler._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
     @pytest.mark.respx(base_url=base_url)
-    async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    async def test_retrying_status_errors_doesnt_leak(
+        self, respx_mock: MockRouter, async_client: AsyncCarbonawareScheduler
+    ) -> None:
         respx_mock.post("/v0/schedule/").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
-            await self.client.post(
-                "/v0/schedule/",
-                body=cast(
-                    object,
-                    maybe_transform(
-                        dict(
-                            duration="PT1H",
-                            windows=[
-                                {
-                                    "end": parse_datetime("2019-12-27T18:11:19.117Z"),
-                                    "start": parse_datetime("2019-12-27T18:11:19.117Z"),
-                                }
-                            ],
-                            zones=[
-                                {
-                                    "provider": "aws",
-                                    "region": "af-south-1",
-                                }
-                            ],
-                        ),
-                        ScheduleCreateParams,
-                    ),
-                ),
-                cast_to=httpx.Response,
-                options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
-            )
-
+            await async_client.schedule.with_streaming_response.create(
+                duration="PT1H",
+                windows=[
+                    {
+                        "end": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        "start": parse_datetime("2019-12-27T18:11:19.117Z"),
+                    }
+                ],
+                zones=[
+                    {
+                        "provider": "aws",
+                        "region": "af-south-1",
+                    }
+                ],
+            ).__aenter__()
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
@@ -1773,6 +1755,28 @@ class TestAsyncCarbonawareScheduler:
                     raise AssertionError("calling get_platform using asyncify resulted in a hung process")
 
                 time.sleep(0.1)
+
+    async def test_proxy_environment_variables(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # Test that the proxy environment variables are set correctly
+        monkeypatch.setenv("HTTPS_PROXY", "https://example.org")
+
+        client = DefaultAsyncHttpxClient()
+
+        mounts = tuple(client._mounts.items())
+        assert len(mounts) == 1
+        assert mounts[0][0].pattern == "https://"
+
+    @pytest.mark.filterwarnings("ignore:.*deprecated.*:DeprecationWarning")
+    async def test_default_client_creation(self) -> None:
+        # Ensure that the client can be initialized without any exceptions
+        DefaultAsyncHttpxClient(
+            verify=True,
+            cert=None,
+            trust_env=True,
+            http1=True,
+            http2=False,
+            limits=httpx.Limits(max_connections=100, max_keepalive_connections=20),
+        )
 
     @pytest.mark.respx(base_url=base_url)
     async def test_follow_redirects(self, respx_mock: MockRouter) -> None:
