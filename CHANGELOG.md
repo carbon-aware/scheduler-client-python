@@ -1,5 +1,56 @@
 # Changelog
 
+## 1.4.0 (2026-05-01)
+
+Full Changelog: [v1.3.0...v1.4.0](https://github.com/carbon-aware/scheduler-client-python/compare/v1.3.0...v1.4.0)
+
+### Features
+
+* **api:** api update ([15cd393](https://github.com/carbon-aware/scheduler-client-python/commit/15cd393656f1a16aa890a341dad04ebd69fe190e))
+* **api:** api update ([4dca8bd](https://github.com/carbon-aware/scheduler-client-python/commit/4dca8bda348585e2d5c4fe64a247b9671b62c890))
+* **client:** add support for aiohttp ([2398bbf](https://github.com/carbon-aware/scheduler-client-python/commit/2398bbf4938af73e092bb9caeacfb0b64f08be91))
+* **client:** support file upload requests ([24c682f](https://github.com/carbon-aware/scheduler-client-python/commit/24c682fc91e3292a42cfeccd942f1d2d1643c665))
+
+
+### Bug Fixes
+
+* **ci:** correct conditional ([3010a52](https://github.com/carbon-aware/scheduler-client-python/commit/3010a52437cce23336abc264833cafa20bcb7daa))
+* **ci:** release-doctor — report correct token name ([e3c5ecb](https://github.com/carbon-aware/scheduler-client-python/commit/e3c5ecb737040fa3afdaab928fb855898b1d2f27))
+* **client:** correctly parse binary response | stream ([77d44c4](https://github.com/carbon-aware/scheduler-client-python/commit/77d44c4bd4f8f5f4e5de983f024bee2aa9248ed7))
+* **client:** don't send Content-Type header on GET requests ([606c91d](https://github.com/carbon-aware/scheduler-client-python/commit/606c91dc97fd9a08282cb8ae6be1dd11bfd5e6b1))
+* **parsing:** correctly handle nested discriminated unions ([70df33b](https://github.com/carbon-aware/scheduler-client-python/commit/70df33b73e37b399b0f963e991169ace9d7604eb))
+* **parsing:** ignore empty metadata ([7efa6a2](https://github.com/carbon-aware/scheduler-client-python/commit/7efa6a243bb22b81ebd97f7f1ab61fca99d084bb))
+* **parsing:** parse extra field types ([a1c5d68](https://github.com/carbon-aware/scheduler-client-python/commit/a1c5d68804ffc872f40a888dd1da5a97d4ecf3b9))
+* **tests:** fix: tests which call HTTP endpoints directly with the example parameters ([10be65e](https://github.com/carbon-aware/scheduler-client-python/commit/10be65ec85d2cf67560c2281558b7ecf05d69569))
+
+
+### Chores
+
+* **ci:** change upload type ([1efc212](https://github.com/carbon-aware/scheduler-client-python/commit/1efc21247b74df758cd101a8a6d8408792e7aa36))
+* **ci:** enable for pull requests ([531ccb7](https://github.com/carbon-aware/scheduler-client-python/commit/531ccb7f4d525384903b92835c294bdda5cbd06d))
+* **ci:** only run for pushes and fork pull requests ([61d50fc](https://github.com/carbon-aware/scheduler-client-python/commit/61d50fc024b7d46e63be4602dcf6d42edf5c1835))
+* **internal:** bump pinned h11 dep ([de167cc](https://github.com/carbon-aware/scheduler-client-python/commit/de167cc952368579bb7f62eaa4d49258f3424f6c))
+* **internal:** codegen related update ([005b1ed](https://github.com/carbon-aware/scheduler-client-python/commit/005b1ed493681c4f5bc5a0482e9bd4e40e9054a5))
+* **internal:** codegen related update ([ba75577](https://github.com/carbon-aware/scheduler-client-python/commit/ba75577ca262b9d3d42a6eba8d33e81c868103a2))
+* **internal:** codegen related update ([2b06600](https://github.com/carbon-aware/scheduler-client-python/commit/2b066000a2d8c50235cd7aa9cc951333b17f8ba0))
+* **internal:** codegen related update ([6a1ea3a](https://github.com/carbon-aware/scheduler-client-python/commit/6a1ea3a9d7309be0dedc543ce9e502e36f5dec8a))
+* **internal:** codegen related update ([d87b0ef](https://github.com/carbon-aware/scheduler-client-python/commit/d87b0ef99fc9bc07611bd0a985d5cc7c56192160))
+* **internal:** codegen related update ([de6e97a](https://github.com/carbon-aware/scheduler-client-python/commit/de6e97a446eb2477332afa91883879a44a72303e))
+* **internal:** codegen related update ([c5a1fe7](https://github.com/carbon-aware/scheduler-client-python/commit/c5a1fe70af6ff2e120a90c4168caed62c7411a90))
+* **internal:** update conftest.py ([b76adac](https://github.com/carbon-aware/scheduler-client-python/commit/b76adac6f1e8eea60eb4349a25f0870f6fc6ac52))
+* **package:** mark python 3.13 as supported ([a09f1e0](https://github.com/carbon-aware/scheduler-client-python/commit/a09f1e0e7dd69224044e1c16b4b47f3479ce1182))
+* **project:** add settings file for vscode ([eb8d03f](https://github.com/carbon-aware/scheduler-client-python/commit/eb8d03f1e57f957655370290d99aa8e3f5d9260f))
+* **readme:** fix version rendering on pypi ([6454ffc](https://github.com/carbon-aware/scheduler-client-python/commit/6454ffc31960ddd0971b0e7c9d67b8c1fe215f6e))
+* **readme:** update badges ([0d99a4b](https://github.com/carbon-aware/scheduler-client-python/commit/0d99a4bd57bf817e11d1fcffe9e630dacabec21b))
+* **tests:** add tests for httpx client instantiation & proxies ([6fe2d87](https://github.com/carbon-aware/scheduler-client-python/commit/6fe2d8768c31e6878a9db87390787de37133a42c))
+* **tests:** run tests in parallel ([9cff641](https://github.com/carbon-aware/scheduler-client-python/commit/9cff6410f6bc5a1a37f2037c6868d92e46c5d8a9))
+* **tests:** skip some failing tests on the latest python versions ([2786c5b](https://github.com/carbon-aware/scheduler-client-python/commit/2786c5bdd121eb1134025c075e22cf5dc4e0d4ec))
+
+
+### Documentation
+
+* **client:** fix httpx.Timeout documentation reference ([b152b4a](https://github.com/carbon-aware/scheduler-client-python/commit/b152b4ab06a534dbcb6ed936bee10150c2786d3e))
+
 ## 1.3.0 (2025-06-03)
 
 Full Changelog: [v1.2.0...v1.3.0](https://github.com/carbon-aware/scheduler-client-python/compare/v1.2.0...v1.3.0)
